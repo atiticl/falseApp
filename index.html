@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>智慧学工</title>
+  
+  <!-- iOS PWA Meta Tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="智慧学工">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#3370FF">
+  
+  <link rel="icon" type="image/png" href="assets/emblem.png">
+  <link rel="apple-touch-icon" href="assets/emblem.png">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background-color: #F7F8FA;
+      color: #1F2329;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Container */
+    #app-container {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background-color: #FFFFFF;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+    }
+
+    /* View Viewport */
+    .view-page {
+      display: none;
+      flex-direction: column;
+      min-height: 100vh;
+      width: 100%;
+      background-color: #FFFFFF;
+    }
+    .view-page.active {
+      display: flex;
+    }
+
+    /* Top Browser Header */
+    .browser-header {
+      height: 48px;
+      background-color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 0.5px solid #EFEFEF;
+    }
+    .header-icon-btn {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #1F2329;
+      font-size: 19px;
+    }
+    .header-center-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .header-title {
+      font-size: 15.5px;
+      font-weight: 500;
+      color: #1F2329;
+      line-height: 1.2;
+    }
+    .header-subtitle {
+      font-size: 10.5px;
+      color: #8F959E;
+      margin-top: 1px;
+    }
+
+    /* Breadcrumb Header */
+    .breadcrumb-bar {
+      padding: 10px 16px;
+      background-color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      font-size: 13.5px;
+      color: #8F959E;
+    }
+    .breadcrumb-item-home {
+      color: #3370FF;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    .breadcrumb-item-home svg {
+      width: 14px;
+      height: 14px;
+      fill: #3370FF;
+      margin-right: 2px;
+    }
+    .breadcrumb-arrow {
+      margin: 0 6px;
+      color: #C2C6CC;
+      font-size: 11px;
+    }
+    .breadcrumb-current {
+      color: #1F2329;
+    }
+
+    /* Bottom Browser Nav Bar */
+    .browser-bottom-bar {
+      height: 44px;
+      background-color: #FFFFFF;
+      border-top: 0.5px solid #F0F0F0;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      position: sticky;
+      bottom: 0;
+      z-index: 90;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    .browser-bottom-btn {
+      color: #8F959E;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 8px 30px;
+    }
+    .browser-bottom-btn.active {
+      color: #1F2329;
+    }
+
+    /* Page 1: Home Specific Styles */
+    .home-banner {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .home-notice-box {
+      margin: 12px 14px 0 14px;
+      background-color: #FFFFFF;
+      border-radius: 8px;
+      border: 1px solid #ECEFF4;
+      padding: 11px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.02);
+    }
+    .home-notice-left {
+      display: flex;
+      align-items: center;
+      font-size: 13px;
+      color: #4E5969;
+    }
+    .home-notice-left span.icon {
+      margin-right: 8px;
+      font-size: 15px;
+    }
+    .home-notice-arrow {
+      color: #C2C6CC;
+      font-size: 13px;
+    }
+
+    /* Empty Card */
+    .home-empty-card {
+      margin: 10px 14px 0 14px;
+      background-color: #FFFFFF;
+      border-radius: 8px;
+      border: 1px solid #ECEFF4;
+      padding: 24px 16px 20px 16px;
+      text-align: center;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.02);
+    }
+    .home-empty-img {
+      width: 140px;
+      height: auto;
+      margin: 0 auto 10px auto;
+      display: block;
+    }
+    .home-empty-title {
+      font-size: 13px;
+      color: #646A73;
+      margin-bottom: 4px;
+    }
+    .home-empty-subtitle {
+      font-size: 11.5px;
+      color: #8F959E;
+    }
+    .home-empty-subtitle a {
+      color: #3370FF;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    /* Quick Action Card */
+    .home-action-card {
+      margin: 12px 14px 0 14px;
+      background: #F0F5FF;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.02);
+    }
+    .home-action-top {
+      display: flex;
+      padding: 16px 14px;
+    }
+    .home-action-item {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    .home-action-item img {
+      width: 44px;
+      height: 44px;
+      margin-right: 10px;
+    }
+    .home-action-item-text {
+      font-size: 15px;
+      font-weight: 500;
+      color: #1F2329;
+    }
+    .home-action-subtabs {
+      background: #FFFFFF;
+      display: flex;
+      border-top: 1px solid #EEF1F6;
+      padding: 10px 0;
+    }
+    .home-action-subtab {
+      flex: 1;
+      text-align: center;
+      font-size: 13px;
+      color: #646A73;
+      border-right: 1px solid #F0F2F5;
+      cursor: pointer;
+    }
+    .home-action-subtab:last-child {
+      border-right: none;
+    }
+
+    /* Notice Announcement */
+    .home-notice-header {
+      padding: 16px 16px 8px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .home-notice-title {
+      font-size: 15.5px;
+      font-weight: bold;
+      color: #1F2329;
+    }
+    .home-notice-more {
+      font-size: 13px;
+      color: #3370FF;
+      cursor: pointer;
+    }
+    .home-notice-content-card {
+      margin: 0 14px 20px 14px;
+      background: #FFFFFF;
+      border: 1px solid #ECEFF4;
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+    }
+    .home-notice-content-card img {
+      width: 140px;
+      height: auto;
+      margin: 0 auto;
+      display: block;
+    }
+
+    /* Bottom App TabBar */
+    .bottom-app-tabbar {
+      height: 52px;
+      background: #FFFFFF;
+      border-top: 0.5px solid #ECEEF2;
+      display: flex;
+      align-items: center;
+      position: sticky;
+      bottom: 44px;
+      z-index: 80;
+    }
+    .tabbar-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #8F959E;
+      font-size: 10px;
+      cursor: pointer;
+    }
+    .tabbar-item.active {
+      color: #3370FF;
+    }
+    .tabbar-item svg {
+      width: 21px;
+      height: 21px;
+      margin-bottom: 2px;
+      fill: currentColor;
+    }
+
+    /* Page 2: My Applications Styles */
+    .search-box-wrap {
+      padding: 8px 16px;
+      background-color: #FFFFFF;
+    }
+    .search-box {
+      height: 36px;
+      background-color: #F5F6F8;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #8F959E;
+      font-size: 14px;
+    }
+    .search-box svg {
+      width: 15px;
+      height: 15px;
+      fill: #8F959E;
+      margin-right: 6px;
+    }
+
+    /* Segment Tabs */
+    .segment-tabs {
+      height: 42px;
+      display: flex;
+      background: #FFFFFF;
+      border-bottom: 1px solid #ECEEF2;
+    }
+    .segment-tab-item {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: #646A73;
+      position: relative;
+      cursor: pointer;
+    }
+    .segment-tab-item.active {
+      color: #3370FF;
+      font-weight: 500;
+    }
+    .segment-tab-item.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      width: 38px;
+      height: 2.5px;
+      background-color: #3370FF;
+      border-radius: 2px;
+    }
+
+    /* Application Cards */
+    .app-cards-list {
+      padding: 12px 14px;
+      flex: 1;
+      background-color: #F7F8FA;
+    }
+    .app-apply-card {
+      background: #FFFFFF;
+      border-radius: 8px;
+      padding: 18px 16px;
+      margin-bottom: 12px;
+      position: relative;
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+    .app-apply-card-title {
+      font-size: 16px;
+      font-weight: 500;
+      color: #1F2329;
+      margin-bottom: 10px;
+    }
+    .app-apply-card-row {
+      font-size: 14px;
+      color: #646A73;
+      margin-bottom: 6px;
+    }
+    .app-apply-card-row.node-row span.node-val {
+      color: #3370FF;
+    }
+    .stamp-badge {
+      position: absolute;
+      right: 18px;
+      top: 14px;
+      width: 68px;
+      height: 68px;
+      pointer-events: none;
+    }
+    .list-end-hint {
+      text-align: center;
+      font-size: 12.5px;
+      color: #8F959E;
+      padding: 16px 0;
+    }
+
+    /* Page 3: Detail Page Styles */
+    .avatar-wrapper {
+      text-align: center;
+      padding: 24px 0 18px 0;
+      background-color: #FFFFFF;
+    }
+    .avatar-wrapper img {
+      width: 86px;
+      height: auto;
+      display: inline-block;
+    }
+
+    /* Section Bar */
+    .detail-section-title-wrap {
+      display: flex;
+      align-items: center;
+      padding: 16px 16px 10px 16px;
+      background: #FFFFFF;
+    }
+    .section-blue-line {
+      width: 3.5px;
+      height: 16px;
+      background-color: #3370FF;
+      border-radius: 2px;
+      margin-right: 8px;
+    }
+    .section-title-text {
+      font-size: 16px;
+      font-weight: bold;
+      color: #1F2329;
+    }
+
+    /* Section 1: Student info (Right-aligned values) */
+    .student-info-box {
+      padding: 0 16px 12px 16px;
+      background: #FFFFFF;
+    }
+    .student-info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 9.5px 0;
+      font-size: 15px;
+    }
+    .student-info-label {
+      color: #8F959E;
+      font-weight: 400;
+    }
+    .student-info-val {
+      color: #1F2329;
+      font-weight: 400;
+      text-align: right;
+    }
+
+    /* Section Strip Divider */
+    .section-strip-divider {
+      height: 10px;
+      background-color: #F7F8FA;
+      width: 100%;
+    }
+
+    /* Section 2: Leave info (Inline text following colon) */
+    .leave-info-box {
+      padding: 0 16px 12px 16px;
+      background: #FFFFFF;
+    }
+    .leave-info-row {
+      padding: 9px 0;
+      font-size: 15px;
+      line-height: 1.45;
+      word-break: break-all;
+    }
+    .leave-info-label {
+      color: #8F959E;
+      font-weight: 400;
+      margin-right: 4px;
+    }
+    .leave-info-val {
+      color: #1F2329;
+      font-weight: 400;
+    }
+
+    /* Section 3: Timeline */
+    .timeline-wrapper {
+      padding: 10px 20px 28px 20px;
+      background: #FFFFFF;
+    }
+    .timeline-step {
+      display: flex;
+      position: relative;
+    }
+    .timeline-left {
+      width: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-right: 12px;
+    }
+    .timeline-circle {
+      width: 19px;
+      height: 19px;
+      border-radius: 50%;
+      border: 1.5px solid #3370FF;
+      background: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #3370FF;
+      font-size: 11px;
+      font-weight: bold;
+      z-index: 2;
+    }
+    .timeline-line {
+      width: 1.5px;
+      background-color: #3370FF;
+      flex: 1;
+      margin-top: 2px;
+      margin-bottom: 2px;
+    }
+    .timeline-right {
+      flex: 1;
+      padding-bottom: 28px;
+    }
+    .timeline-step:last-child .timeline-right {
+      padding-bottom: 0;
+    }
+    .timeline-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .timeline-node-title {
+      font-size: 15px;
+      font-weight: 500;
+      color: #1F2329;
+    }
+    .timeline-node-time {
+      font-size: 13.5px;
+      color: #8F959E;
+    }
+    .timeline-sub-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+    }
+    .timeline-sub-left {
+      color: #8F959E;
+    }
+    .timeline-sub-right {
+      color: #3370FF;
+    }
+
+    /* Admin Page / Modal */
+    #admin-view {
+      background-color: #F7F8FA;
+    }
+    .admin-form-group {
+      margin: 14px;
+      background: #FFFFFF;
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+    .admin-group-title {
+      font-size: 15px;
+      font-weight: bold;
+      color: #1F2329;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+    }
+    .admin-field {
+      margin-bottom: 12px;
+    }
+    .admin-field label {
+      display: block;
+      font-size: 13px;
+      color: #646A73;
+      margin-bottom: 5px;
+    }
+    .admin-field input, .admin-field select, .admin-field textarea {
+      width: 100%;
+      height: 38px;
+      border: 1px solid #DCDFE6;
+      border-radius: 6px;
+      padding: 0 10px;
+      font-size: 14px;
+      color: #1F2329;
+      background: #FFFFFF;
+      outline: none;
+      user-select: text;
+    }
+    .admin-field textarea {
+      height: 64px;
+      padding: 8px 10px;
+      resize: vertical;
+    }
+    .admin-field input:focus, .admin-field textarea:focus {
+      border-color: #3370FF;
+    }
+
+    /* Fixed Save Button in Admin */
+    .admin-fixed-bar {
+      position: sticky;
+      bottom: 0;
+      background: #FFFFFF;
+      padding: 12px 16px;
+      border-top: 1px solid #EEF0F4;
+      display: flex;
+      gap: 12px;
+      z-index: 100;
+    }
+    .btn-save {
+      flex: 2;
+      background-color: #3370FF;
+      color: #FFFFFF;
+      border: none;
+      height: 42px;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .btn-reset {
+      flex: 1;
+      background-color: #F2F3F5;
+      color: #4E5969;
+      border: none;
+      height: 42px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    /* Action Sheet Modal */
+    .modal-mask {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 200;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .modal-mask.active {
+      display: flex;
+    }
+    .action-sheet {
+      background: #FFFFFF;
+      width: 100%;
+      max-width: 480px;
+      border-radius: 16px 16px 0 0;
+      padding: 16px;
+      box-shadow: 0 -4px 16px rgba(0,0,0,0.1);
+      animation: slideUp 0.25s ease-out;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+    .sheet-btn {
+      width: 100%;
+      height: 46px;
+      border-radius: 8px;
+      border: none;
+      font-size: 15.5px;
+      margin-bottom: 8px;
+      cursor: pointer;
+    }
+    .sheet-btn.primary {
+      background: #3370FF;
+      color: #FFFFFF;
+      font-weight: 500;
+    }
+    .sheet-btn.cancel {
+      background: #F2F3F5;
+      color: #4E5969;
+    }
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.8);
+      color: #FFFFFF;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 14px;
+      z-index: 999;
+      display: none;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+<div id="app-container">
+
+  <!-- ==================== PAGE 1: 首页 ==================== -->
+  <div id="home-view" class="view-page active">
+    <!-- Browser Top Bar -->
+    <div class="browser-header">
+      <div class="header-icon-btn" onclick="showToast('已在首页')">✕</div>
+      <div class="header-center-info">
+        <div class="header-title">首页</div>
+        <div class="header-subtitle">cas.tficedu.com</div>
+      </div>
+      <div class="header-icon-btn" onclick="openMenu()">···</div>
+    </div>
+
+    <!-- Main Content -->
+    <div style="flex: 1; overflow-y: auto;">
+      <!-- Header Banner -->
+      <img src="assets/header_banner.png" alt="智慧学工" class="home-banner">
+
+      <!-- Notice Bar -->
+      <div class="home-notice-box" onclick="showToast('暂无新通知')">
+        <div class="home-notice-left">
+          <span class="icon">🔔</span>
+          <span>暂无消息通知</span>
+        </div>
+        <div class="home-notice-arrow">&gt;</div>
+      </div>
+
+      <!-- Empty Favorite Card -->
+      <div class="home-empty-card">
+        <img src="assets/empty_illustration.png" alt="暂无收藏" class="home-empty-img">
+        <div class="home-empty-title">暂无收藏应用</div>
+        <div class="home-empty-subtitle">请前往 <a onclick="switchTab('app')">应用</a> 收藏起来吧!</div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="home-action-card">
+        <div class="home-action-top">
+          <div class="home-action-item" onclick="showToast('暂无待办事项')">
+            <img src="assets/icon_daiban.png" alt="我的待办">
+            <span class="home-action-item-text">我的待办</span>
+          </div>
+          <div class="home-action-item" onclick="navigateTo('apply')">
+            <img src="assets/icon_shenqing.png" alt="我的申请">
+            <span class="home-action-item-text">我的申请</span>
+          </div>
+        </div>
+        <div class="home-action-subtabs">
+          <div class="home-action-subtab" onclick="showToast('无草稿')">草稿</div>
+          <div class="home-action-subtab" onclick="showToast('无待阅')">待阅</div>
+          <div class="home-action-subtab" onclick="showToast('无已阅')">已阅</div>
+          <div class="home-action-subtab" onclick="showToast('无已办')">已办</div>
+          <div class="home-action-subtab" onclick="showToast('无参与')">参与</div>
+        </div>
+      </div>
+
+      <!-- Notice Announcement -->
+      <div class="home-notice-header">
+        <div class="home-notice-title">通知公告</div>
+        <div class="home-notice-more" onclick="showToast('已展示最新公告')">查看更多</div>
+      </div>
+      <div class="home-notice-content-card">
+        <img src="assets/notice_illustration.png" alt="公告">
+      </div>
+    </div>
+
+    <!-- Bottom App TabBar -->
+    <div class="bottom-app-tabbar">
+      <div class="tabbar-item active" onclick="switchTab('home')">
+        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span>首页</span>
+      </div>
+      <div class="tabbar-item" onclick="switchTab('app')">
+        <svg viewBox="0 0 24 24"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg>
+        <span>应用</span>
+      </div>
+      <div class="tabbar-item" onclick="switchTab('contact')">
+        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        <span>通讯录</span>
+      </div>
+      <div class="tabbar-item" onclick="navigateTo('admin')">
+        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        <span>我的</span>
+      </div>
+    </div>
+
+    <!-- Bottom Browser Navigation Bar -->
+    <div class="browser-bottom-bar">
+      <div class="browser-bottom-btn">&lt;</div>
+      <div class="browser-bottom-btn">&gt;</div>
+    </div>
+  </div>
+
+
+  <!-- ==================== PAGE 2: 我的事务 ==================== -->
+  <div id="apply-view" class="view-page">
+    <!-- Browser Top Bar -->
+    <div class="browser-header">
+      <div class="header-icon-btn" onclick="navigateTo('home')">✕</div>
+      <div class="header-center-info">
+        <div class="header-title">我的事务</div>
+        <div class="header-subtitle">cas.tficedu.com</div>
+      </div>
+      <div class="header-icon-btn" onclick="openMenu()">···</div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-bar">
+      <div class="breadcrumb-item-home" onclick="navigateTo('home')">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        首页
+      </div>
+      <div class="breadcrumb-arrow">&gt;</div>
+      <div class="breadcrumb-current">我的事务</div>
+    </div>
+
+    <!-- Search Box -->
+    <div class="search-box-wrap">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <span>搜索</span>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="segment-tabs">
+      <div class="segment-tab-item" onclick="showToast('无待办')">我的待办</div>
+      <div class="segment-tab-item active">我的申请</div>
+      <div class="segment-tab-item" onclick="showToast('无参与')">我的参与</div>
+      <div class="segment-tab-item" onclick="showToast('无待阅')">我的待阅</div>
+    </div>
+
+    <!-- Card List -->
+    <div class="app-cards-list">
+      <!-- Card 1: Click to enter Detail -->
+      <div class="app-apply-card" onclick="navigateTo('detail')">
+        <div class="app-apply-card-title">请假流程(新)</div>
+        <div class="app-apply-card-row">申请时间：<span id="card-apply-time-1">2026-10-11 21:42:44</span></div>
+        <div id="card-status-row-1" class="app-apply-card-row node-row" style="display: none;">当前节点：<span class="node-val">辅导员审核</span></div>
+        <img id="card-stamp-1" src="assets/stamp_passed.png" alt="已通过" class="stamp-badge">
+      </div>
+
+      <!-- Card 2 -->
+      <div class="app-apply-card" onclick="navigateTo('detail')">
+        <div class="app-apply-card-title">请假流程(新)</div>
+        <div class="app-apply-card-row">申请时间：<span id="card-apply-time-2">2026-09-26 15:58:27</span></div>
+        <img src="assets/stamp_passed.png" alt="已通过" class="stamp-badge">
+      </div>
+
+      <!-- Card 3 -->
+      <div class="app-apply-card" onclick="showToast('历史已办流程')">
+        <div class="app-apply-card-title">请假流程(新)</div>
+        <div class="app-apply-card-row">申请时间：<span id="card-apply-time-3">2026-09-24 18:28:47</span></div>
+        <div class="app-apply-card-row node-row">当前节点：<span class="node-val">辅导员审核</span></div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="app-apply-card" onclick="showToast('历史已办流程')">
+        <div class="app-apply-card-title">请假流程(新)</div>
+        <div class="app-apply-card-row">申请时间：<span id="card-apply-time-4">2026-09-16 14:29:53</span></div>
+        <div class="app-apply-card-row node-row">当前节点：<span class="node-val">辅导员审核</span></div>
+      </div>
+
+      <div class="list-end-hint">到底了...</div>
+    </div>
+
+    <!-- Bottom Browser Navigation Bar -->
+    <div class="browser-bottom-bar">
+      <div class="browser-bottom-btn active" onclick="navigateTo('home')">&lt;</div>
+      <div class="browser-bottom-btn">&gt;</div>
+    </div>
+  </div>
+
+
+  <!-- ==================== PAGE 3: 流程申请详情 ==================== -->
+  <div id="detail-view" class="view-page">
+    <!-- Browser Top Bar -->
+    <div class="browser-header">
+      <div class="header-icon-btn" onclick="navigateTo('apply')">✕</div>
+      <div class="header-center-info">
+        <div class="header-title">流程申请</div>
+        <div class="header-subtitle">cas.tficedu.com</div>
+      </div>
+      <div class="header-icon-btn" onclick="openMenu()">···</div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-bar">
+      <div class="breadcrumb-item-home" onclick="navigateTo('home')">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        首页
+      </div>
+      <div class="breadcrumb-arrow">&gt;</div>
+      <div class="breadcrumb-current" onclick="navigateTo('apply')" style="cursor: pointer;">我的事务</div>
+    </div>
+
+    <div style="flex: 1; overflow-y: auto;">
+      <!-- Avatar -->
+      <div class="avatar-wrapper">
+        <img src="assets/avatar.png" alt="头像">
+      </div>
+
+      <!-- Section 1: 学生基本信息 (Right-aligned values) -->
+      <div class="detail-section-title-wrap">
+        <div class="section-blue-line"></div>
+        <div class="section-title-text">学生基本信息</div>
+      </div>
+      <div class="student-info-box">
+        <div class="student-info-row">
+          <span class="student-info-label">姓名：</span>
+          <span id="dt-student-name" class="student-info-val">张妍颀</span>
+        </div>
+        <div class="student-info-row">
+          <span class="student-info-label">学号：</span>
+          <span id="dt-student-id" class="student-info-val">2026109250019</span>
+        </div>
+        <div class="student-info-row">
+          <span class="student-info-label">性别：</span>
+          <span id="dt-gender" class="student-info-val">女</span>
+        </div>
+        <div class="student-info-row">
+          <span class="student-info-label">学院：</span>
+          <span id="dt-college" class="student-info-val">文化产业学院</span>
+        </div>
+        <div class="student-info-row">
+          <span class="student-info-label">专业：</span>
+          <span id="dt-major" class="student-info-val">播音与主持</span>
+        </div>
+        <div class="student-info-row">
+          <span class="student-info-label">班级：</span>
+          <span id="dt-class-name" class="student-info-val">2026级播音1班</span>
+        </div>
+        <div class="student-info-row">
+          <span class="student-info-label">手机号码：</span>
+          <span id="dt-phone" class="student-info-val">13271551508</span>
+        </div>
+      </div>
+
+      <div class="section-strip-divider"></div>
+
+      <!-- Section 2: 请假信息（新） (Inline text after colon) -->
+      <div class="detail-section-title-wrap">
+        <div class="section-blue-line"></div>
+        <div class="section-title-text">请假信息（新）</div>
+      </div>
+      <div class="leave-info-box">
+        <div class="leave-info-row">
+          <span class="leave-info-label">请假类型：</span>
+          <span id="dt-leave-type" class="leave-info-val">事假</span>
+        </div>
+        <div class="leave-info-row">
+          <span class="leave-info-label">请假去向：</span>
+          <span id="dt-leave-destination" class="leave-info-val">离校不离市</span>
+        </div>
+        <div class="leave-info-row">
+          <span class="leave-info-label">详细地址：</span>
+          <span id="dt-detail-address" class="leave-info-val">四川省眉山市仁寿县天府新区信息职业学院</span>
+        </div>
+        <div class="leave-info-row">
+          <span class="leave-info-label">请假开始时间：</span>
+          <span id="dt-start-time" class="leave-info-val">2026-10-12 11:00</span>
+        </div>
+        <div class="leave-info-row">
+          <span class="leave-info-label">请假结束时间：</span>
+          <span id="dt-end-time" class="leave-info-val">2026-10-12 12:00</span>
+        </div>
+        <div class="leave-info-row">
+          <span class="leave-info-label">请假时长天：</span>
+          <span id="dt-duration" class="leave-info-val">1小时</span>
+        </div>
+        <div class="leave-info-row">
+          <span class="leave-info-label">紧急联系人：</span>
+          <span id="dt-emergency-contact" class="leave-info-val">张妍颀</span>
+        </div>
+        <div class="leave-info-row">
+          <span class="leave-info-label">紧急联系人电话：</span>
+          <span id="dt-emergency-phone" class="leave-info-val">13271551508</span>
+        </div>
+        <div class="leave-info-row">
+          <span class="leave-info-label">请假理由：</span>
+          <span id="dt-leave-reason" class="leave-info-val">老师，我的快递滞留了三天，我要去取快递</span>
+        </div>
+        <div class="leave-info-row">
+          <span class="leave-info-label">附件：</span>
+          <span id="dt-attachment" class="leave-info-val"></span>
+        </div>
+      </div>
+
+      <div class="section-strip-divider"></div>
+
+      <!-- Section 3: 办理进度 -->
+      <div class="detail-section-title-wrap" style="justify-content: space-between;">
+        <div style="display: flex; align-items: center;">
+          <div class="section-blue-line"></div>
+          <div class="section-title-text">办理进度</div>
+        </div>
+        <div style="font-size: 14px; color: #3370FF; cursor: pointer;" onclick="showToast('已是最新流程节点')">查看流程图</div>
+      </div>
+
+      <div class="timeline-wrapper">
+        <!-- Node 1: 申请 -->
+        <div class="timeline-step">
+          <div class="timeline-left">
+            <div class="timeline-circle">✓</div>
+            <div class="timeline-line"></div>
+          </div>
+          <div class="timeline-right">
+            <div class="timeline-title-row">
+              <span class="timeline-node-title">申请</span>
+              <span id="tl-apply-time" class="timeline-node-time">2026-10-11 21:43</span>
+            </div>
+            <div class="timeline-sub-row">
+              <span id="tl-apply-student" class="timeline-sub-left">张妍颀</span>
+              <span id="tl-apply-action" class="timeline-sub-right">取快递</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Node 2: 辅导员审核 -->
+        <div class="timeline-step">
+          <div class="timeline-left">
+            <div class="timeline-circle">✓</div>
+            <div class="timeline-line"></div>
+          </div>
+          <div class="timeline-right">
+            <div class="timeline-title-row">
+              <span class="timeline-node-title">辅导员审核</span>
+              <span id="tl-audit-time" class="timeline-node-time">2026-10-11 23:36</span>
+            </div>
+            <div class="timeline-sub-row">
+              <span id="tl-counselor-name" class="timeline-sub-left">吴思雨</span>
+              <span id="tl-audit-decision" class="timeline-sub-right">同意</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Node 3: 结束 -->
+        <div class="timeline-step">
+          <div class="timeline-left">
+            <div class="timeline-circle">✓</div>
+          </div>
+          <div class="timeline-right">
+            <div class="timeline-title-row">
+              <span class="timeline-node-title">结束</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Browser Navigation Bar -->
+    <div class="browser-bottom-bar">
+      <div class="browser-bottom-btn active" onclick="navigateTo('apply')">&lt;</div>
+      <div class="browser-bottom-btn">&gt;</div>
+    </div>
+  </div>
+
+
+  <!-- ==================== PAGE 4: 后台数据管理 ==================== -->
+  <div id="admin-view" class="view-page">
+    <!-- Header -->
+    <div class="browser-header">
+      <div class="header-icon-btn" onclick="navigateTo('home')">✕</div>
+      <div class="header-center-info">
+        <div class="header-title">后台数据管理</div>
+        <div class="header-subtitle">修改将自动持久化至手机</div>
+      </div>
+      <div class="header-icon-btn" onclick="navigateTo('detail')">预览</div>
+    </div>
+
+    <div style="flex: 1; overflow-y: auto;">
+      <!-- Section A: 申请列表设置 -->
+      <div class="admin-form-group">
+        <div class="admin-group-title">⏱️ 我的申请列表设置</div>
+        <div class="admin-field">
+          <label>申请 1 时间（最新，带详情入口）</label>
+          <input type="text" id="ipt-applyTime1">
+        </div>
+        <div class="admin-field">
+          <label>申请 1 状态（印章或节点）</label>
+          <select id="ipt-applyStatus1">
+            <option value="passed">已通过（绿色印章）</option>
+            <option value="counselor_audit">当前节点：辅导员审核</option>
+          </select>
+        </div>
+        <div class="admin-field">
+          <label>申请 2 时间</label>
+          <input type="text" id="ipt-applyTime2">
+        </div>
+        <div class="admin-field">
+          <label>申请 3 时间</label>
+          <input type="text" id="ipt-applyTime3">
+        </div>
+        <div class="admin-field">
+          <label>申请 4 时间</label>
+          <input type="text" id="ipt-applyTime4">
+        </div>
+      </div>
+
+      <!-- Section B: 学生基本信息 -->
+      <div class="admin-form-group">
+        <div class="admin-group-title">🎓 学生基本信息设置</div>
+        <div class="admin-field">
+          <label>姓名</label>
+          <input type="text" id="ipt-studentName">
+        </div>
+        <div class="admin-field">
+          <label>学号</label>
+          <input type="text" id="ipt-studentId">
+        </div>
+        <div class="admin-field">
+          <label>性别</label>
+          <input type="text" id="ipt-gender">
+        </div>
+        <div class="admin-field">
+          <label>学院</label>
+          <input type="text" id="ipt-college">
+        </div>
+        <div class="admin-field">
+          <label>专业</label>
+          <input type="text" id="ipt-major">
+        </div>
+        <div class="admin-field">
+          <label>班级</label>
+          <input type="text" id="ipt-className">
+        </div>
+        <div class="admin-field">
+          <label>手机号码</label>
+          <input type="text" id="ipt-phone">
+        </div>
+      </div>
+
+      <!-- Section C: 请假信息 -->
+      <div class="admin-form-group">
+        <div class="admin-group-title">📝 请假信息设置</div>
+        <div class="admin-field">
+          <label>请假类型</label>
+          <input type="text" id="ipt-leaveType">
+        </div>
+        <div class="admin-field">
+          <label>请假去向</label>
+          <input type="text" id="ipt-leaveDestination">
+        </div>
+        <div class="admin-field">
+          <label>详细地址</label>
+          <textarea id="ipt-detailAddress"></textarea>
+        </div>
+        <div class="admin-field">
+          <label>请假开始时间</label>
+          <input type="text" id="ipt-startTime">
+        </div>
+        <div class="admin-field">
+          <label>请假结束时间</label>
+          <input type="text" id="ipt-endTime">
+        </div>
+        <div class="admin-field">
+          <label>请假时长天</label>
+          <input type="text" id="ipt-duration">
+        </div>
+        <div class="admin-field">
+          <label>紧急联系人</label>
+          <input type="text" id="ipt-emergencyContact">
+        </div>
+        <div class="admin-field">
+          <label>紧急联系人电话</label>
+          <input type="text" id="ipt-emergencyPhone">
+        </div>
+        <div class="admin-field">
+          <label>请假理由</label>
+          <textarea id="ipt-leaveReason"></textarea>
+        </div>
+        <div class="admin-field">
+          <label>附件</label>
+          <input type="text" id="ipt-attachment" placeholder="无或留空">
+        </div>
+      </div>
+
+      <!-- Section D: 办理进度 -->
+      <div class="admin-form-group">
+        <div class="admin-group-title">🔄 办理进度节点设置</div>
+        <div class="admin-field">
+          <label>申请时间（节点 1）</label>
+          <input type="text" id="ipt-timelineApplyTime">
+        </div>
+        <div class="admin-field">
+          <label>申请动作描述（右侧蓝字）</label>
+          <input type="text" id="ipt-timelineApplyAction">
+        </div>
+        <div class="admin-field">
+          <label>辅导员审核时间（节点 2）</label>
+          <input type="text" id="ipt-timelineAuditTime">
+        </div>
+        <div class="admin-field">
+          <label>辅导员审核名称（姓名）</label>
+          <input type="text" id="ipt-counselorName">
+        </div>
+        <div class="admin-field">
+          <label>辅导员审核结论（右侧蓝字）</label>
+          <input type="text" id="ipt-timelineAuditDecision">
+        </div>
+      </div>
+    </div>
+
+    <!-- Fixed Bottom Action Bar -->
+    <div class="admin-fixed-bar">
+      <button class="btn-reset" onclick="resetToDefault()">恢复默认</button>
+      <button class="btn-save" onclick="saveAdminData()">保存并生效</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Action Sheet Menu Modal -->
+<div id="action-sheet-mask" class="modal-mask" onclick="closeMenu(event)">
+  <div class="action-sheet" onclick="event.stopPropagation()">
+    <button class="sheet-btn primary" onclick="navigateTo('admin'); closeMenu();">🛠️ 进入后台修改数据</button>
+    <button class="sheet-btn primary" style="background:#F0F5FF; color:#3370FF;" onclick="navigateTo('detail'); closeMenu();">📄 查看请假详情页</button>
+    <button class="sheet-btn primary" style="background:#F0F5FF; color:#3370FF;" onclick="navigateTo('apply'); closeMenu();">📂 查看我的事务列表</button>
+    <button class="sheet-btn cancel" onclick="closeMenu()">取消</button>
+  </div>
+</div>
+
+<!-- Toast Box -->
+<div id="toast"></div>
+
+<script>
+  // Default Initial Data matching prototypes 1:1
+  const defaultData = {
+    applyTime1: '2026-10-11 21:42:44',
+    applyStatus1: 'passed', // 'passed' or 'counselor_audit'
+    applyTime2: '2026-09-26 15:58:27',
+    applyTime3: '2026-09-24 18:28:47',
+    applyTime4: '2026-09-16 14:29:53',
+
+    studentName: '张妍颀',
+    studentId: '2026109250019',
+    gender: '女',
+    college: '文化产业学院',
+    major: '播音与主持',
+    className: '2026级播音1班',
+    phone: '13271551508',
+
+    leaveType: '事假',
+    leaveDestination: '离校不离市',
+    detailAddress: '四川省眉山市仁寿县天府新区信息职业学院',
+    startTime: '2026-10-12 11:00',
+    endTime: '2026-10-12 12:00',
+    duration: '1小时',
+    emergencyContact: '张妍颀',
+    emergencyPhone: '13271551508',
+    leaveReason: '老师，我的快递滞留了三天，我要去取快递',
+    attachment: '',
+
+    timelineApplyTime: '2026-10-11 21:43',
+    timelineApplyAction: '取快递',
+    timelineAuditTime: '2026-10-11 23:36',
+    counselorName: '吴思雨',
+    timelineAuditDecision: '同意'
+  };
+
+  const STORAGE_KEY = 'smart_campus_web_data_v1';
+  let appData = Object.assign({}, defaultData);
+
+  // Load from LocalStorage
+  function loadData() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        appData = Object.assign({}, defaultData, JSON.parse(saved));
+      }
+    } catch (e) {
+      console.warn('LocalStorage error:', e);
+    }
+    renderUI();
+  }
+
+  // Render Data into DOM
+  function renderUI() {
+    // Page 2: Applications
+    document.getElementById('card-apply-time-1').innerText = appData.applyTime1;
+    document.getElementById('card-apply-time-2').innerText = appData.applyTime2;
+    document.getElementById('card-apply-time-3').innerText = appData.applyTime3;
+    document.getElementById('card-apply-time-4').innerText = appData.applyTime4;
+
+    const stamp1 = document.getElementById('card-stamp-1');
+    const nodeRow1 = document.getElementById('card-status-row-1');
+    if (appData.applyStatus1 === 'passed') {
+      stamp1.style.display = 'block';
+      nodeRow1.style.display = 'none';
+    } else {
+      stamp1.style.display = 'none';
+      nodeRow1.style.display = 'block';
+    }
+
+    // Page 3: Detail
+    document.getElementById('dt-student-name').innerText = appData.studentName;
+    document.getElementById('dt-student-id').innerText = appData.studentId;
+    document.getElementById('dt-gender').innerText = appData.gender;
+    document.getElementById('dt-college').innerText = appData.college;
+    document.getElementById('dt-major').innerText = appData.major;
+    document.getElementById('dt-class-name').innerText = appData.className;
+    document.getElementById('dt-phone').innerText = appData.phone;
+
+    document.getElementById('dt-leave-type').innerText = appData.leaveType;
+    document.getElementById('dt-leave-destination').innerText = appData.leaveDestination;
+    document.getElementById('dt-detail-address').innerText = appData.detailAddress;
+    document.getElementById('dt-start-time').innerText = appData.startTime;
+    document.getElementById('dt-end-time').innerText = appData.endTime;
+    document.getElementById('dt-duration').innerText = appData.duration;
+    document.getElementById('dt-emergency-contact').innerText = appData.emergencyContact;
+    document.getElementById('dt-emergency-phone').innerText = appData.emergencyPhone;
+    document.getElementById('dt-leave-reason').innerText = appData.leaveReason;
+    document.getElementById('dt-attachment').innerText = appData.attachment || '';
+
+    document.getElementById('tl-apply-time').innerText = appData.timelineApplyTime;
+    document.getElementById('tl-apply-student').innerText = appData.studentName;
+    document.getElementById('tl-apply-action').innerText = appData.timelineApplyAction;
+
+    document.getElementById('tl-audit-time').innerText = appData.timelineAuditTime;
+    document.getElementById('tl-counselor-name').innerText = appData.counselorName;
+    document.getElementById('tl-audit-decision').innerText = appData.timelineAuditDecision;
+
+    // Fill Admin Inputs
+    for (let key in defaultData) {
+      const el = document.getElementById('ipt-' + key);
+      if (el) {
+        el.value = appData[key] !== undefined ? appData[key] : '';
+      }
+    }
+  }
+
+  // Save Admin Data
+  function saveAdminData() {
+    for (let key in defaultData) {
+      const el = document.getElementById('ipt-' + key);
+      if (el) {
+        appData[key] = el.value.trim();
+      }
+    }
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+    } catch (e) {
+      console.warn('Save failed:', e);
+    }
+    renderUI();
+    showToast('数据保存成功，已持久化！');
+    setTimeout(() => {
+      navigateTo('detail');
+    }, 600);
+  }
+
+  // Reset to default
+  function resetToDefault() {
+    if (confirm('确认将所有数据恢复为默认原型图设置？')) {
+      appData = Object.assign({}, defaultData);
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch (e) {}
+      renderUI();
+      showToast('已恢复默认设置');
+    }
+  }
+
+  // Navigation
+  function navigateTo(pageId) {
+    const pages = document.querySelectorAll('.view-page');
+    pages.forEach(p => p.classList.remove('active'));
+
+    const target = document.getElementById(pageId + '-view');
+    if (target) {
+      target.classList.add('active');
+      window.scrollTo(0, 0);
+      window.location.hash = pageId;
+    }
+  }
+
+  function switchTab(tab) {
+    if (tab === 'home') navigateTo('home');
+    else if (tab === 'app') showToast('应用中心');
+    else if (tab === 'contact') showToast('通讯录');
+  }
+
+  // Modal Sheet
+  function openMenu() {
+    document.getElementById('action-sheet-mask').classList.add('active');
+  }
+  function closeMenu() {
+    document.getElementById('action-sheet-mask').classList.remove('active');
+  }
+
+  // Toast
+  let toastTimer = null;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.innerText = msg;
+    t.style.display = 'block';
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      t.style.display = 'none';
+    }, 1800);
+  }
+
+  // Hash route listener
+  window.addEventListener('hashchange', () => {
+    const hash = window.location.hash.replace('#', '') || 'home';
+    if (document.getElementById(hash + '-view')) {
+      navigateTo(hash);
+    }
+  });
+
+  // Init
+  window.addEventListener('DOMContentLoaded', () => {
+    const hash = window.location.hash.replace('#', '') || 'home';
+    loadData();
+    navigateTo(hash);
+  });
+</script>
+
+</body>
+</html>
