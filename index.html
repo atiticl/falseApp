@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>智慧学工</title>
+  <title>智慧学工 - 统一身份认证</title>
   
   <!-- iOS PWA Meta Tags -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -153,7 +153,128 @@
       color: #1F2329;
     }
 
-    /* Page 1: Home Specific Styles */
+    /* ==================== LOGIN & REGISTER STYLES ==================== */
+    .auth-page {
+      background: linear-gradient(180deg, #F0F5FF 0%, #FFFFFF 35%, #FFFFFF 100%);
+      flex: 1;
+      padding: 30px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .auth-brand {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .auth-brand img {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      box-shadow: 0 4px 12px rgba(51, 112, 255, 0.15);
+      margin-bottom: 12px;
+    }
+    .auth-brand-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #1F2329;
+      margin-bottom: 4px;
+    }
+    .auth-brand-sub {
+      font-size: 12.5px;
+      color: #8F959E;
+      letter-spacing: 0.5px;
+    }
+
+    .auth-card {
+      background: #FFFFFF;
+      border-radius: 12px;
+      padding: 24px 20px;
+      box-shadow: 0 4px 20px rgba(31, 35, 41, 0.06);
+      border: 1px solid #ECEFF4;
+    }
+    .auth-tabs {
+      display: flex;
+      border-bottom: 1.5px solid #F0F2F5;
+      margin-bottom: 22px;
+    }
+    .auth-tab {
+      flex: 1;
+      text-align: center;
+      padding-bottom: 12px;
+      font-size: 15px;
+      font-weight: 500;
+      color: #646A73;
+      cursor: pointer;
+      position: relative;
+    }
+    .auth-tab.active {
+      color: #3370FF;
+      font-weight: bold;
+    }
+    .auth-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1.5px;
+      left: 25%;
+      width: 50%;
+      height: 2.5px;
+      background-color: #3370FF;
+      border-radius: 2px;
+    }
+
+    .auth-input-group {
+      margin-bottom: 16px;
+    }
+    .auth-input-label {
+      font-size: 13px;
+      color: #4E5969;
+      margin-bottom: 6px;
+      display: block;
+    }
+    .auth-input {
+      width: 100%;
+      height: 42px;
+      border: 1px solid #DCDFE6;
+      border-radius: 6px;
+      padding: 0 12px;
+      font-size: 14.5px;
+      outline: none;
+      color: #1F2329;
+      user-select: text;
+    }
+    .auth-input:focus {
+      border-color: #3370FF;
+      box-shadow: 0 0 0 2px rgba(51, 112, 255, 0.1);
+    }
+    .auth-btn-submit {
+      width: 100%;
+      height: 44px;
+      background-color: #3370FF;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 500;
+      margin-top: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(51, 112, 255, 0.25);
+    }
+    .auth-quick-hint {
+      margin-top: 18px;
+      padding: 10px;
+      background: #F8F9FB;
+      border-radius: 6px;
+      font-size: 12px;
+      color: #8F959E;
+      line-height: 1.5;
+    }
+    .auth-quick-hint span.clickable {
+      color: #3370FF;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    /* ==================== PAGE 1: HOME STYLES ==================== */
     .home-banner {
       width: 100%;
       height: auto;
@@ -325,7 +446,7 @@
       fill: currentColor;
     }
 
-    /* Page 2: My Applications Styles */
+    /* ==================== PAGE 2: MY APPLICATIONS ==================== */
     .search-box-wrap {
       padding: 8px 16px;
       background-color: #FFFFFF;
@@ -422,7 +543,7 @@
       padding: 16px 0;
     }
 
-    /* Page 3: Detail Page Styles */
+    /* ==================== PAGE 3: DETAIL PAGE ==================== */
     .avatar-wrapper {
       text-align: center;
       padding: 24px 0 18px 0;
@@ -483,7 +604,7 @@
       width: 100%;
     }
 
-    /* Section 2: Leave info (Inline text following colon) */
+    /* Section 2: Leave info (Inline text after colon) */
     .leave-info-box {
       padding: 0 16px 12px 16px;
       background: #FFFFFF;
@@ -576,10 +697,38 @@
       color: #3370FF;
     }
 
-    /* Admin Page / Modal */
+    /* ==================== PAGE 4: ADMIN STYLES ==================== */
     #admin-view {
       background-color: #F7F8FA;
     }
+    .admin-user-card {
+      margin: 14px 14px 0 14px;
+      background: #F0F5FF;
+      border-radius: 8px;
+      padding: 14px 16px;
+      border: 1px solid #D6E4FF;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .admin-user-info {
+      font-size: 13.5px;
+      color: #1F2329;
+    }
+    .admin-user-info span.name {
+      font-weight: bold;
+      color: #3370FF;
+    }
+    .admin-logout-btn {
+      background: #FFFFFF;
+      border: 1px solid #C2D6FF;
+      color: #3370FF;
+      padding: 5px 12px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      cursor: pointer;
+    }
+
     .admin-form-group {
       margin: 14px;
       background: #FFFFFF;
@@ -712,7 +861,7 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(0,0,0,0.8);
+      background: rgba(0,0,0,0.85);
       color: #FFFFFF;
       padding: 10px 20px;
       border-radius: 6px;
@@ -720,6 +869,9 @@
       z-index: 999;
       display: none;
       pointer-events: none;
+      text-align: center;
+      max-width: 80%;
+      line-height: 1.4;
     }
   </style>
 </head>
@@ -727,8 +879,80 @@
 
 <div id="app-container">
 
+  <!-- ==================== PAGE 0: 登录 / 注册 ==================== -->
+  <div id="login-view" class="view-page">
+    <div class="browser-header">
+      <div class="header-icon-btn"></div>
+      <div class="header-center-info">
+        <div class="header-title">统一身份认证</div>
+        <div class="header-subtitle">cas.tficedu.com</div>
+      </div>
+      <div class="header-icon-btn">···</div>
+    </div>
+
+    <div class="auth-page">
+      <div class="auth-brand">
+        <img src="assets/emblem.png" alt="校徽">
+        <div class="auth-brand-title">智慧学工 · 统一认证</div>
+        <div class="auth-brand-sub">天府新区信息职业学院</div>
+      </div>
+
+      <div class="auth-card">
+        <!-- Switch Tabs -->
+        <div class="auth-tabs">
+          <div id="tab-login" class="auth-tab active" onclick="switchAuthTab('login')">账号登录</div>
+          <div id="tab-register" class="auth-tab" onclick="switchAuthTab('register')">新用户注册</div>
+        </div>
+
+        <!-- Login Form -->
+        <div id="form-login">
+          <div class="auth-input-group">
+            <label class="auth-input-label">账号 / 学号</label>
+            <input type="text" id="login-username" class="auth-input" placeholder="请输入学号或账号" value="2026109250019">
+          </div>
+          <div class="auth-input-group">
+            <label class="auth-input-label">登录密码</label>
+            <input type="password" id="login-password" class="auth-input" placeholder="请输入密码" value="123456">
+          </div>
+          <button class="auth-btn-submit" onclick="handleLogin()">登 录</button>
+
+          <div class="auth-quick-hint">
+            💡 默认演示账号：<code>2026109250019</code> / 密码：<code>123456</code><br>
+            您也可以点击上方 <span class="clickable" onclick="switchAuthTab('register')">【新用户注册】</span> 创建独立专属账号，每个账号数据完全隔离！
+          </div>
+        </div>
+
+        <!-- Register Form -->
+        <div id="form-register" style="display: none;">
+          <div class="auth-input-group">
+            <label class="auth-input-label">设置账号 / 学号</label>
+            <input type="text" id="reg-username" class="auth-input" placeholder="输入您的自定义账号或学号">
+          </div>
+          <div class="auth-input-group">
+            <label class="auth-input-label">学生姓名（可选）</label>
+            <input type="text" id="reg-student-name" class="auth-input" placeholder="输入学生姓名（如：张三）">
+          </div>
+          <div class="auth-input-group">
+            <label class="auth-input-label">设置密码</label>
+            <input type="password" id="reg-password" class="auth-input" placeholder="输入密码">
+          </div>
+          <div class="auth-input-group">
+            <label class="auth-input-label">确认密码</label>
+            <input type="password" id="reg-password-confirm" class="auth-input" placeholder="再次输入密码">
+          </div>
+          <button class="auth-btn-submit" style="background:#00B42A;" onclick="handleRegister()">注 册 并 登 录</button>
+
+          <div class="auth-quick-hint">
+            🔒 提示：注册后该账号将拥有完全独立的请假数据空间，修改与保存不会影响其他任何人！
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
   <!-- ==================== PAGE 1: 首页 ==================== -->
-  <div id="home-view" class="view-page active">
+  <div id="home-view" class="view-page">
     <!-- Browser Top Bar -->
     <div class="browser-header">
       <div class="header-icon-btn" onclick="showToast('已在首页')">✕</div>
@@ -1090,9 +1314,18 @@
       <div class="header-icon-btn" onclick="navigateTo('home')">✕</div>
       <div class="header-center-info">
         <div class="header-title">后台数据管理</div>
-        <div class="header-subtitle">修改将自动持久化至手机</div>
+        <div class="header-subtitle">多账号数据完全隔离</div>
       </div>
       <div class="header-icon-btn" onclick="navigateTo('detail')">预览</div>
+    </div>
+
+    <!-- Current Account Bar -->
+    <div class="admin-user-card">
+      <div class="admin-user-info">
+        👤 当前账号：<span id="current-user-badge" class="name">默认账号</span>
+        <div style="font-size: 11px; color: #8F959E; margin-top: 2px;">此账号下的数据修改独立保存</div>
+      </div>
+      <button class="admin-logout-btn" onclick="handleLogout()">退出 / 切换</button>
     </div>
 
     <div style="flex: 1; overflow-y: auto;">
@@ -1230,8 +1463,8 @@
 
     <!-- Fixed Bottom Action Bar -->
     <div class="admin-fixed-bar">
-      <button class="btn-reset" onclick="resetToDefault()">恢复默认</button>
-      <button class="btn-save" onclick="saveAdminData()">保存并生效</button>
+      <button class="btn-reset" onclick="resetToDefault()">恢复此账号默认</button>
+      <button class="btn-save" onclick="saveAdminData()">保存此账号数据</button>
     </div>
   </div>
 
@@ -1243,6 +1476,7 @@
     <button class="sheet-btn primary" onclick="navigateTo('admin'); closeMenu();">🛠️ 进入后台修改数据</button>
     <button class="sheet-btn primary" style="background:#F0F5FF; color:#3370FF;" onclick="navigateTo('detail'); closeMenu();">📄 查看请假详情页</button>
     <button class="sheet-btn primary" style="background:#F0F5FF; color:#3370FF;" onclick="navigateTo('apply'); closeMenu();">📂 查看我的事务列表</button>
+    <button class="sheet-btn primary" style="background:#FFF1F0; color:#F53F3F;" onclick="handleLogout(); closeMenu();">🚪 退出当前账号 / 换号</button>
     <button class="sheet-btn cancel" onclick="closeMenu()">取消</button>
   </div>
 </div>
@@ -1251,8 +1485,8 @@
 <div id="toast"></div>
 
 <script>
-  // Default Initial Data matching prototypes 1:1
-  const defaultData = {
+  // Prototype Template Default Data
+  const templateData = {
     applyTime1: '2026-10-11 21:42:44',
     applyStatus1: 'passed', // 'passed' or 'counselor_audit'
     applyTime2: '2026-09-26 15:58:27',
@@ -1285,19 +1519,168 @@
     timelineAuditDecision: '同意'
   };
 
-  const STORAGE_KEY = 'smart_campus_web_data_v1';
-  let appData = Object.assign({}, defaultData);
+  const STORAGE_USERS_KEY = 'smart_campus_users_db_v2';
+  const STORAGE_SESSION_KEY = 'smart_campus_session_user_v2';
 
-  // Load from LocalStorage
-  function loadData() {
+  let currentUsername = null;
+  let appData = Object.assign({}, templateData);
+
+  // Helper: Deep Clone
+  function clone(obj) {
+    return JSON.parse(JSON.stringify(obj));
+  }
+
+  // Get All Users Database
+  function getUsersDb() {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        appData = Object.assign({}, defaultData, JSON.parse(saved));
+      const raw = localStorage.getItem(STORAGE_USERS_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (e) {}
+
+    // Init with default demo account
+    const initialDb = {
+      '2026109250019': {
+        password: '123456',
+        data: clone(templateData)
       }
+    };
+    saveUsersDb(initialDb);
+    return initialDb;
+  }
+
+  function saveUsersDb(db) {
+    try {
+      localStorage.setItem(STORAGE_USERS_KEY, JSON.stringify(db));
     } catch (e) {
-      console.warn('LocalStorage error:', e);
+      console.warn('saveUsersDb error:', e);
     }
+  }
+
+  // Auth Tab Switch
+  function switchAuthTab(tab) {
+    if (tab === 'login') {
+      document.getElementById('tab-login').classList.add('active');
+      document.getElementById('tab-register').classList.remove('active');
+      document.getElementById('form-login').style.display = 'block';
+      document.getElementById('form-register').style.display = 'none';
+    } else {
+      document.getElementById('tab-login').classList.remove('active');
+      document.getElementById('tab-register').classList.add('active');
+      document.getElementById('form-login').style.display = 'none';
+      document.getElementById('form-register').style.display = 'block';
+    }
+  }
+
+  // Handle Login
+  function handleLogin() {
+    const u = document.getElementById('login-username').value.trim();
+    const p = document.getElementById('login-password').value.trim();
+
+    if (!u) {
+      showToast('请输入账号或学号');
+      return;
+    }
+    if (!p) {
+      showToast('请输入密码');
+      return;
+    }
+
+    const db = getUsersDb();
+    if (!db[u]) {
+      showToast('账号不存在，请先注册！');
+      return;
+    }
+    if (db[u].password !== p) {
+      showToast('密码错误，请重新输入');
+      return;
+    }
+
+    // Login success
+    setSessionUser(u);
+    showToast('登录成功！');
+    setTimeout(() => {
+      navigateTo('home');
+    }, 400);
+  }
+
+  // Handle Register
+  function handleRegister() {
+    const u = document.getElementById('reg-username').value.trim();
+    const sName = document.getElementById('reg-student-name').value.trim();
+    const p1 = document.getElementById('reg-password').value.trim();
+    const p2 = document.getElementById('reg-password-confirm').value.trim();
+
+    if (!u) {
+      showToast('请设置账号或学号');
+      return;
+    }
+    if (!p1) {
+      showToast('请设置密码');
+      return;
+    }
+    if (p1 !== p2) {
+      showToast('两次输入的密码不一致！');
+      return;
+    }
+
+    const db = getUsersDb();
+    if (db[u]) {
+      showToast('该账号已存在，请直接登录！');
+      return;
+    }
+
+    // New user with isolated data
+    const userData = clone(templateData);
+    if (sName) {
+      userData.studentName = sName;
+      userData.emergencyContact = sName;
+    }
+    // Default studentId to username if digits
+    if (/^\d+$/.test(u)) {
+      userData.studentId = u;
+    }
+
+    db[u] = {
+      password: p1,
+      data: userData
+    };
+    saveUsersDb(db);
+
+    // Auto login
+    setSessionUser(u);
+    showToast('注册成功！已为您自动登录');
+    setTimeout(() => {
+      navigateTo('home');
+    }, 500);
+  }
+
+  // Handle Logout
+  function handleLogout() {
+    localStorage.removeItem(STORAGE_SESSION_KEY);
+    currentUsername = null;
+    showToast('已安全退出账号');
+    setTimeout(() => {
+      navigateTo('login');
+      switchAuthTab('login');
+    }, 300);
+  }
+
+  // Set Session User & Load Data
+  function setSessionUser(username) {
+    currentUsername = username;
+    localStorage.setItem(STORAGE_SESSION_KEY, username);
+
+    const db = getUsersDb();
+    if (db[username] && db[username].data) {
+      appData = clone(db[username].data);
+    } else {
+      appData = clone(templateData);
+    }
+
+    // Update current user badge
+    const badge = document.getElementById('current-user-badge');
+    if (badge) badge.innerText = username;
+
     renderUI();
   }
 
@@ -1348,7 +1731,7 @@
     document.getElementById('tl-audit-decision').innerText = appData.timelineAuditDecision;
 
     // Fill Admin Inputs
-    for (let key in defaultData) {
+    for (let key in templateData) {
       const el = document.getElementById('ipt-' + key);
       if (el) {
         el.value = appData[key] !== undefined ? appData[key] : '';
@@ -1356,40 +1739,57 @@
     }
   }
 
-  // Save Admin Data
+  // Save Admin Data (Account Isolated)
   function saveAdminData() {
-    for (let key in defaultData) {
+    if (!currentUsername) {
+      showToast('请先登录账号');
+      navigateTo('login');
+      return;
+    }
+
+    for (let key in templateData) {
       const el = document.getElementById('ipt-' + key);
       if (el) {
         appData[key] = el.value.trim();
       }
     }
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
-    } catch (e) {
-      console.warn('Save failed:', e);
+
+    // Save exclusively to current user's profile
+    const db = getUsersDb();
+    if (db[currentUsername]) {
+      db[currentUsername].data = clone(appData);
+      saveUsersDb(db);
     }
+
     renderUI();
-    showToast('数据保存成功，已持久化！');
+    showToast(`数据已成功保存至账号 [${currentUsername}]！`);
     setTimeout(() => {
       navigateTo('detail');
     }, 600);
   }
 
-  // Reset to default
+  // Reset to default for current user
   function resetToDefault() {
-    if (confirm('确认将所有数据恢复为默认原型图设置？')) {
-      appData = Object.assign({}, defaultData);
-      try {
-        localStorage.removeItem(STORAGE_KEY);
-      } catch (e) {}
+    if (!currentUsername) return;
+    if (confirm(`确认将账号 [${currentUsername}] 的所有数据恢复为默认原型图设置？`)) {
+      appData = clone(templateData);
+      const db = getUsersDb();
+      if (db[currentUsername]) {
+        db[currentUsername].data = clone(templateData);
+        saveUsersDb(db);
+      }
       renderUI();
-      showToast('已恢复默认设置');
+      showToast('当前账号已恢复默认设置');
     }
   }
 
   // Navigation
   function navigateTo(pageId) {
+    // If not logged in and not on login page, force to login
+    if (!currentUsername && pageId !== 'login') {
+      pageId = 'login';
+    }
+
     const pages = document.querySelectorAll('.view-page');
     pages.forEach(p => p.classList.remove('active'));
 
@@ -1429,17 +1829,26 @@
 
   // Hash route listener
   window.addEventListener('hashchange', () => {
-    const hash = window.location.hash.replace('#', '') || 'home';
-    if (document.getElementById(hash + '-view')) {
+    const hash = window.location.hash.replace('#', '');
+    if (hash && document.getElementById(hash + '-view')) {
       navigateTo(hash);
     }
   });
 
-  // Init
+  // Init App Session
   window.addEventListener('DOMContentLoaded', () => {
-    const hash = window.location.hash.replace('#', '') || 'home';
-    loadData();
-    navigateTo(hash);
+    // Check session
+    const savedUser = localStorage.getItem(STORAGE_SESSION_KEY);
+    const db = getUsersDb();
+
+    if (savedUser && db[savedUser]) {
+      setSessionUser(savedUser);
+      const hash = window.location.hash.replace('#', '') || 'home';
+      navigateTo(hash === 'login' ? 'home' : hash);
+    } else {
+      // Direct to login
+      navigateTo('login');
+    }
   });
 </script>
 
